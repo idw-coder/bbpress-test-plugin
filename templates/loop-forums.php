@@ -13,7 +13,7 @@ defined('ABSPATH') || exit;
 do_action('bbp_template_before_forums_loop'); ?>
 
 <ul id="forums-list-<?php bbp_forum_id(); ?>" class="bbp-forums">
-    test
+    <div class="text-red-500 font-bold mb-2">TailwindCSS動作テスト</div>
 
     <li class="bbp-header">
 

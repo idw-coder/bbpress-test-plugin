@@ -7,6 +7,28 @@
 */
 
 /**
+ * TailwindCSS（ビルド済み）を読み込み
+ */
+add_action('wp_enqueue_scripts', 'bbpress_override_enqueue_tailwind');
+
+function bbpress_override_enqueue_tailwind()
+{
+    // ビルド済みCSSファイルのパス
+    $css_file = plugin_dir_path(__FILE__) . 'assets/style.css';
+    $css_url = plugin_dir_url(__FILE__) . 'assets/style.css';
+
+    // ファイルが存在する場合のみ読み込み
+    if (file_exists($css_file)) {
+        wp_enqueue_style(
+            'bbpress-tailwind',
+            $css_url,
+            array(),
+            filemtime($css_file) // ファイル更新時刻をバージョンに使用
+        );
+    }
+}
+
+/**
  * bbPressテンプレートスタック機能について
  * 
  * bbPressは独自のテンプレート階層システムを持っており、以下の順序でテンプレートを検索します：
