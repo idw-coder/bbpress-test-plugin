@@ -1,3 +1,30 @@
-@tailwind base;
+
+/* @tailwind base; */
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    /* bbPressコンテナ内のリンクスタイル */
+    #bbpress-forums a {
+        @apply no-underline;
+        @apply text-blue-500;
+        @apply hover:text-blue-600;
+    }
+    
+    /* bbPressコンテナ内の入力欄スタイル */
+    #bbpress-forums input[type="text"],
+    #bbpress-forums input[type="email"],
+    #bbpress-forums input[type="password"],
+    #bbpress-forums input[type="url"],
+    #bbpress-forums textarea,
+    #bbpress-forums select {
+      @apply border border-gray-300 px-2 py-1;
+    }
+  
+    /* フォーカス時のスタイル */
+    #bbpress-forums input:focus,
+    #bbpress-forums textarea:focus,
+    #bbpress-forums select:focus {
+      @apply border-blue-500 outline-none;
+    }
+}
