@@ -31,7 +31,7 @@ defined('ABSPATH') || exit;
 
 		<?php do_action('bbp_theme_before_forum_title'); ?>
 
-		<a class="bbp-forum-title bg-gray-500 text-white font-bold px-2 py-1 rounded-sm" href="<?php bbp_forum_permalink(); ?>"><?php bbp_forum_title(); ?></a>
+		<a class="bbp-forum-title" href="<?php bbp_forum_permalink(); ?>"><?php bbp_forum_title(); ?></a>
 
 		<?php do_action('bbp_theme_after_forum_title'); ?>
 
