@@ -13,8 +13,6 @@ defined('ABSPATH') || exit;
 do_action('bbp_template_before_forums_loop'); ?>
 
 <ul id="forums-list-<?php bbp_forum_id(); ?>" class="bbp-forums">
-    test
-
     <li class="bbp-header">
 
         <ul class="forum-titles">
