@@ -1,0 +1,126 @@
+/* @tailwind base; */
+
+#bbpress-forums {
+  font-family: ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"
+  /* font-family: 'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif; */
+}
+
+/* bbPressコンテナ内のリンクスタイル */
+
+#bbpress-forums a {
+  text-decoration-line: none;
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity))
+}
+
+#bbpress-forums a:hover {
+  --tw-text-opacity: 1;
+  color: rgb(37 99 235 / var(--tw-text-opacity))
+}
+
+/* bbPressコンテナ内の入力欄スタイル */
+
+#bbpress-forums input[type="text"],
+  #bbpress-forums input[type="email"],
+  #bbpress-forums input[type="password"],
+  #bbpress-forums input[type="url"],
+  #bbpress-forums textarea,
+  #bbpress-forums select {
+  border-width: 1px;
+  --tw-border-opacity: 1;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem
+}
+
+/* フォーカス時のスタイル */
+
+#bbpress-forums input:focus,
+  #bbpress-forums textarea:focus,
+  #bbpress-forums select:focus {
+  --tw-border-opacity: 1;
+  border-color: rgb(59 130 246 / var(--tw-border-opacity));
+  outline: 2px solid transparent;
+  outline-offset: 2px
+}
+
+.mb-4 {
+  margin-bottom: 1rem
+}
+
+.ml-4 {
+  margin-left: 1rem
+}
+
+.mr-1 {
+  margin-right: 0.25rem
+}
+
+.inline-block {
+  display: inline-block
+}
+
+.rounded {
+  border-radius: 0.25rem
+}
+
+.bg-blue-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity))
+}
+
+.px-2 {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem
+}
+
+.py-1 {
+  padding-top: 0.25rem;
+  padding-bottom: 0.25rem
+}
+
+.text-lg {
+  font-size: 1.125rem;
+  line-height: 1.75rem
+}
+
+.text-xs {
+  font-size: 0.75rem;
+  line-height: 1rem
+}
+
+.font-bold {
+  font-weight: 700
+}
+
+.\!text-gray-800 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(31 41 55 / var(--tw-text-opacity)) !important
+}
+
+.text-blue-800 {
+  --tw-text-opacity: 1;
+  color: rgb(30 64 175 / var(--tw-text-opacity))
+}
+
+.transition-colors {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms
+}
+
+.hover\:bg-blue-200:hover {
+  --tw-bg-opacity: 1;
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity))
+}
+
+.hover\:\!text-gray-600:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(75 85 99 / var(--tw-text-opacity)) !important
+}
+
+.hover\:\!underline:hover {
+  text-decoration-line: underline !important
+}

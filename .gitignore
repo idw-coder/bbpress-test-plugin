@@ -9,7 +9,7 @@ package-lock.json
 yarn.lock
 
 # Build output
-assets/style.css
+# assets/style.css
 dist/
 build/
 
