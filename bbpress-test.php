@@ -7,7 +7,6 @@
 */
 
 add_action('wp_enqueue_scripts', 'bbpress_override_enqueue_tailwind');
-
 function bbpress_override_enqueue_tailwind()
 {
     // ビルド済みCSSファイルのパス
@@ -93,7 +92,7 @@ function debug_bbpress_templates($template, $template_names, $load, $require_onc
     $display_template = $template ? $template : '見つかりませんでした';
     
     // デバッグ出力を条件付きで表示（ヘッダー送信エラーを防ぐ）
-    if (!is_user_logged_in() && !is_admin()) {
+    if (is_user_logged_in() && !is_admin()) {
         // echo '<div style="background: #E9EEF6; font-size: 0.5rem;">選択されたテンプレート: ' . $display_template . '</div>';
     }
 
@@ -101,6 +100,79 @@ function debug_bbpress_templates($template, $template_names, $load, $require_onc
     // このフィルターは監視用であり、実際のテンプレート選択は bbp_template_stack で行う
     return $template;
 }
+
+/**
+ * テンプレートファイル内のハードコードされた文字列も変更
+ */
+function custom_bbp_text_strings($translated_text, $text, $domain)
+{
+    if ($domain === 'bbpress') {
+        switch ($text) {
+            case 'Forum':
+                return '質問掲示板';
+            case 'Forums':
+                return '質問掲示板';
+            case 'Forum:':
+                return '質問掲示板:';
+            case 'Create New Forum':
+                return '新しい質問掲示板を作成';
+            case 'Create New Forum in "%s"':
+                return '「%s」に新しい質問掲示板を作成';
+            case 'Now Editing "%s"':
+                return '「%s」を編集中';
+            case 'Forum Name (Maximum Length: %d):':
+                return '質問掲示板名（最大文字数: %d）:';
+            case 'Forum Type:':
+                return '質問掲示板タイプ:';
+            case 'Forum Moderators:':
+                return '質問掲示板モデレーター:';
+            case 'This group does not currently have a forum.':
+                return 'このグループには現在質問掲示板がありません。';
+        }
+    }
+    return $translated_text;
+}
+// add_filter('gettext', 'custom_bbp_text_strings', 20, 3);
+
+/**
+ * 購読リンクの文字列を変更
+ */
+add_filter('gettext', 'custom_bbpress_subscription_text', 20, 3);
+function custom_bbpress_subscription_text($translated_text, $text, $domain) {
+    if ($domain === 'bbpress') {
+        switch ($text) {
+            case 'Subscribe':
+                return 'メール通知を受け取る';
+            case 'Unsubscribe':
+                return 'メール通知解除';
+        }
+    }
+    return $translated_text;
+}
+
+
+/**
+ * bbPressフォーラムのページタイトルを「質問掲示板」に変更
+ */
+function custom_bbp_forum_labels($labels)
+{
+    $labels['name'] = '質問掲示板';
+    $labels['singular_name'] = '質問掲示板';
+    $labels['menu_name'] = '質問掲示板';
+    $labels['all_items'] = 'すべての質問掲示板';
+    $labels['add_new_item'] = '新しい質問掲示板を作成';
+    $labels['edit_item'] = '質問掲示板を編集';
+    $labels['new_item'] = '新しい質問掲示板';
+    $labels['view_item'] = '質問掲示板を表示';
+    $labels['view_items'] = '質問掲示板を表示';
+    $labels['search_items'] = '質問掲示板を検索';
+    $labels['not_found'] = '質問掲示板が見つかりません';
+    $labels['not_found_in_trash'] = 'ゴミ箱に質問掲示板が見つかりません';
+    $labels['archives'] = '質問掲示板';
+
+    return $labels;
+}
+add_filter('bbp_get_forum_post_type_labels', 'custom_bbp_forum_labels');
 
 /**
  * 返信の管理リンクから不要なものを削除

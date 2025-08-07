@@ -10,12 +10,12 @@
 #bbpress-forums a {
   text-decoration-line: none;
   --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity))
+  color: rgb(59 130 246 / var(--tw-text-opacity, 1))
 }
 
 #bbpress-forums a:hover {
   --tw-text-opacity: 1;
-  color: rgb(37 99 235 / var(--tw-text-opacity))
+  color: rgb(37 99 235 / var(--tw-text-opacity, 1))
 }
 
 /* bbPressコンテナ内の入力欄スタイル */
@@ -28,7 +28,7 @@
   #bbpress-forums select {
   border-width: 1px;
   --tw-border-opacity: 1;
-  border-color: rgb(209 213 219 / var(--tw-border-opacity));
+  border-color: rgb(209 213 219 / var(--tw-border-opacity, 1));
   padding-left: 0.5rem;
   padding-right: 0.5rem;
   padding-top: 0.25rem;
@@ -41,7 +41,7 @@
   #bbpress-forums textarea:focus,
   #bbpress-forums select:focus {
   --tw-border-opacity: 1;
-  border-color: rgb(59 130 246 / var(--tw-border-opacity));
+  border-color: rgb(59 130 246 / var(--tw-border-opacity, 1));
   outline: 2px solid transparent;
   outline-offset: 2px
 }
@@ -58,6 +58,10 @@
   margin-right: 0.25rem
 }
 
+.mr-0 {
+  margin-right: 0px
+}
+
 .inline-block {
   display: inline-block
 }
@@ -68,7 +72,16 @@
 
 .bg-blue-100 {
   --tw-bg-opacity: 1;
-  background-color: rgb(219 234 254 / var(--tw-bg-opacity))
+  background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1))
+}
+
+.bg-red-500 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1))
+}
+
+.p-4 {
+  padding: 1rem
 }
 
 .px-2 {
@@ -97,12 +110,12 @@
 
 .\!text-gray-800 {
   --tw-text-opacity: 1 !important;
-  color: rgb(31 41 55 / var(--tw-text-opacity)) !important
+  color: rgb(31 41 55 / var(--tw-text-opacity, 1)) !important
 }
 
 .text-blue-800 {
   --tw-text-opacity: 1;
-  color: rgb(30 64 175 / var(--tw-text-opacity))
+  color: rgb(30 64 175 / var(--tw-text-opacity, 1))
 }
 
 .transition-colors {
@@ -113,12 +126,12 @@
 
 .hover\:bg-blue-200:hover {
   --tw-bg-opacity: 1;
-  background-color: rgb(191 219 254 / var(--tw-bg-opacity))
+  background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1))
 }
 
 .hover\:\!text-gray-600:hover {
   --tw-text-opacity: 1 !important;
-  color: rgb(75 85 99 / var(--tw-text-opacity)) !important
+  color: rgb(75 85 99 / var(--tw-text-opacity, 1)) !important
 }
 
 .hover\:\!underline:hover {
