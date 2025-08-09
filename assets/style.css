@@ -8,14 +8,14 @@
 /* bbPressコンテナ内のリンクスタイル */
 
 #bbpress-forums a {
-  text-decoration-line: none;
   --tw-text-opacity: 1;
-  color: rgb(59 130 246 / var(--tw-text-opacity, 1))
+  color: rgb(59 130 246 / var(--tw-text-opacity, 1));
+  text-decoration-line: none;
+  transition: all 0.3s ease-in-out !important
 }
 
 #bbpress-forums a:hover {
-  --tw-text-opacity: 1;
-  color: rgb(37 99 235 / var(--tw-text-opacity, 1))
+  color: rgb(59 130 246 / 0.7)
 }
 
 /* bbPressコンテナ内の入力欄スタイル */
@@ -46,8 +46,56 @@
   outline-offset: 2px
 }
 
+.bbp-forums .bbp-body ul.even,
+  .bbp-forums .bbp-body ul.odd {
+  --tw-bg-opacity: 1 !important;
+  background-color: rgb(249 250 251 / var(--tw-bg-opacity, 1)) !important;
+  border-radius: 0.375rem !important;
+  padding: 1.5rem !important;
+  width: 100%
+}
+
+@media (min-width: 768px) {
+  .bbp-forums .bbp-body ul.even,
+  .bbp-forums .bbp-body ul.odd {
+    width: calc(50% - 0.5rem)
+  }
+}
+
+.absolute {
+  position: absolute
+}
+
+.relative {
+  position: relative
+}
+
+.\!right-0 {
+  right: 0px !important
+}
+
+.\!float-none {
+  float: none !important
+}
+
+.\!mb-6 {
+  margin-bottom: 1.5rem !important
+}
+
+.\!mb-8 {
+  margin-bottom: 2rem !important
+}
+
 .mb-4 {
   margin-bottom: 1rem
+}
+
+.mb-6 {
+  margin-bottom: 1.5rem
+}
+
+.ml-3 {
+  margin-left: 0.75rem
 }
 
 .ml-4 {
@@ -58,16 +106,91 @@
   margin-right: 0.25rem
 }
 
-.mr-0 {
-  margin-right: 0px
+.block {
+  display: block
 }
 
 .inline-block {
   display: inline-block
 }
 
+.flex {
+  display: flex
+}
+
+.hidden {
+  display: none
+}
+
+.h-full {
+  height: 100%
+}
+
+.\!w-auto {
+  width: auto !important
+}
+
+.flex-col {
+  flex-direction: column
+}
+
+.flex-wrap {
+  flex-wrap: wrap
+}
+
+.items-end {
+  align-items: flex-end
+}
+
+.items-center {
+  align-items: center
+}
+
+.justify-center {
+  justify-content: center
+}
+
+.justify-between {
+  justify-content: space-between
+}
+
+.gap-4 {
+  gap: 1rem
+}
+
+.space-y-2 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(0.5rem * var(--tw-space-y-reverse))
+}
+
 .rounded {
   border-radius: 0.25rem
+}
+
+.rounded-full {
+  border-radius: 9999px
+}
+
+.\!border-0 {
+  border-width: 0px !important
+}
+
+.\!border-b-4 {
+  border-bottom-width: 4px !important
+}
+
+.\!border-solid {
+  border-style: solid !important
+}
+
+.\!border-none {
+  border-style: none !important
+}
+
+.\!border-gray-300 {
+  --tw-border-opacity: 1 !important;
+  border-color: rgb(209 213 219 / var(--tw-border-opacity, 1)) !important
 }
 
 .bg-blue-100 {
@@ -75,13 +198,9 @@
   background-color: rgb(219 234 254 / var(--tw-bg-opacity, 1))
 }
 
-.bg-red-500 {
+.bg-blue-500 {
   --tw-bg-opacity: 1;
-  background-color: rgb(239 68 68 / var(--tw-bg-opacity, 1))
-}
-
-.p-4 {
-  padding: 1rem
+  background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1))
 }
 
 .px-2 {
@@ -89,9 +208,51 @@
   padding-right: 0.5rem
 }
 
+.px-8 {
+  padding-left: 2rem;
+  padding-right: 2rem
+}
+
 .py-1 {
   padding-top: 0.25rem;
   padding-bottom: 0.25rem
+}
+
+.py-2 {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem
+}
+
+.py-8 {
+  padding-top: 2rem;
+  padding-bottom: 2rem
+}
+
+.\!pb-2 {
+  padding-bottom: 0.5rem !important
+}
+
+.\!text-center {
+  text-align: center !important
+}
+
+.text-center {
+  text-align: center
+}
+
+.\!text-xl {
+  font-size: 1.25rem !important;
+  line-height: 1.75rem !important
+}
+
+.\!text-xs {
+  font-size: 0.75rem !important;
+  line-height: 1rem !important
+}
+
+.text-base {
+  font-size: 1rem;
+  line-height: 1.5rem
 }
 
 .text-lg {
@@ -104,8 +265,25 @@
   line-height: 1rem
 }
 
+.\!font-bold {
+  font-weight: 700 !important
+}
+
 .font-bold {
   font-weight: 700
+}
+
+.font-medium {
+  font-weight: 500
+}
+
+.tracking-widest {
+  letter-spacing: 0.1em
+}
+
+.\!text-gray-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1)) !important
 }
 
 .\!text-gray-800 {
@@ -113,9 +291,19 @@
   color: rgb(31 41 55 / var(--tw-text-opacity, 1)) !important
 }
 
+.\!text-white {
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important
+}
+
 .text-blue-800 {
   --tw-text-opacity: 1;
   color: rgb(30 64 175 / var(--tw-text-opacity, 1))
+}
+
+.text-gray-500 {
+  --tw-text-opacity: 1;
+  color: rgb(107 114 128 / var(--tw-text-opacity, 1))
 }
 
 .transition-colors {
@@ -129,9 +317,18 @@
   background-color: rgb(191 219 254 / var(--tw-bg-opacity, 1))
 }
 
+.hover\:bg-blue-500\/80:hover {
+  background-color: rgb(59 130 246 / 0.8)
+}
+
 .hover\:\!text-gray-600:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(75 85 99 / var(--tw-text-opacity, 1)) !important
+}
+
+.hover\:\!text-white:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important
 }
 
 .hover\:\!underline:hover {

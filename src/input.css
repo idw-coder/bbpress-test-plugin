@@ -12,9 +12,12 @@
   
   /* bbPressコンテナ内のリンクスタイル */
   #bbpress-forums a {
-      @apply no-underline;
-      @apply text-blue-500;
-      @apply hover:text-blue-600;
+    @apply no-underline text-blue-500;
+    transition: all 0.3s ease-in-out !important;
+  }
+  
+  #bbpress-forums a:hover {
+      @apply text-blue-500/70;
   }
   
   /* bbPressコンテナ内の入力欄スタイル */
@@ -32,5 +35,14 @@
   #bbpress-forums textarea:focus,
   #bbpress-forums select:focus {
     @apply border-blue-500 outline-none;
+  }
+
+  .bbp-forums .bbp-body ul.even,
+  .bbp-forums .bbp-body ul.odd {
+    @apply !bg-gray-50;
+    @apply !rounded-md;
+    @apply !p-6;
+    @apply w-full;
+    @apply md:w-[calc(50%-0.5rem)];
   }
 }

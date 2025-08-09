@@ -11,9 +11,9 @@
 defined('ABSPATH') || exit;
 
 do_action('bbp_template_before_forums_loop'); ?>
-
-<ul id="forums-list-<?php bbp_forum_id(); ?>" class="bbp-forums">
-    <li class="bbp-header">
+<ul id="forums-list-<?php bbp_forum_id(); ?>"
+    class="bbp-forums !border-none">
+    <li class="bbp-header hidden">
 
         <ul class="forum-titles">
             <li class="bbp-forum-info"><?php esc_html_e('Forum', 'bbpress'); ?></li>
@@ -27,7 +27,7 @@ do_action('bbp_template_before_forums_loop'); ?>
 
     </li><!-- .bbp-header -->
 
-    <li class="bbp-body">
+    <li class="bbp-body flex flex-wrap gap-4 py-8">
 
         <?php while (bbp_forums()) : bbp_the_forum(); ?>
 
@@ -37,14 +37,13 @@ do_action('bbp_template_before_forums_loop'); ?>
 
     </li><!-- .bbp-body -->
 
-    <li class="bbp-footer">
+    <li class="bbp-footer hidden">
 
         <div class="tr">
             <p class="td colspan4">&nbsp;</p>
         </div><!-- .tr -->
 
     </li><!-- .bbp-footer -->
-
 </ul><!-- .forums-directory -->
 
 <?php do_action('bbp_template_after_forums_loop');

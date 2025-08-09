@@ -90,11 +90,11 @@ function debug_bbpress_templates($template, $template_names, $load, $require_onc
 
     // 最終的に選択されたテンプレートを表示
     $display_template = $template ? $template : '見つかりませんでした';
-    
+
     // デバッグ出力を条件付きで表示（ヘッダー送信エラーを防ぐ）
-    if (is_user_logged_in() && !is_admin()) {
-        // echo '<div style="background: #E9EEF6; font-size: 0.5rem;">選択されたテンプレート: ' . $display_template . '</div>';
-    }
+    // if (is_user_logged_in() && !is_admin()) {
+    //     echo '<div style="background: #E9EEF6; font-size: 0.5rem;">選択されたテンプレート: ' . $display_template . '</div>';
+    // }
 
     // 重要: テンプレートパスを変更せずにそのまま返す
     // このフィルターは監視用であり、実際のテンプレート選択は bbp_template_stack で行う
@@ -138,7 +138,8 @@ function custom_bbp_text_strings($translated_text, $text, $domain)
  * 購読リンクの文字列を変更
  */
 add_filter('gettext', 'custom_bbpress_subscription_text', 20, 3);
-function custom_bbpress_subscription_text($translated_text, $text, $domain) {
+function custom_bbpress_subscription_text($translated_text, $text, $domain)
+{
     if ($domain === 'bbpress') {
         switch ($text) {
             case 'Subscribe':
@@ -250,3 +251,16 @@ function custom_topic_admin_links($links, $topic_id)
 
     return $links;
 }
+
+/**
+ * メール送信テスト
+ * メール送信テスト用のURL: https://domain.com/?mailtest=1
+ */
+add_action('init', function () {
+    if (isset($_GET['mailtest'])) {
+        $ok = wp_mail(get_option('admin_email'), 'wp_mail test', 'OK');
+        header('Content-Type: text/plain; charset=utf-8');
+        echo $ok ? 'OK' : 'NG';
+        exit;
+    }
+});
