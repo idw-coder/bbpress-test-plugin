@@ -11,7 +11,7 @@
 defined('ABSPATH') || exit;
 // error_log('loop-single-forum.php');
 ?>
-<ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?>>
+<ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?> style="display: flex; flex-direction: column;">
 	<li class="bbp-forum-info !float-none !w-auto">
 
 		<?php if (bbp_is_user_home() && bbp_is_subscriptions()) : ?>
@@ -44,45 +44,83 @@ defined('ABSPATH') || exit;
 
 		<?php do_action('bbp_theme_before_forum_sub_forums'); ?>
 
-		<?php bbp_list_forums(); ?>
+		<?php // bbp_list_forums(); 
+		?>
+		<?php
+		// 現在のフォーラムの子フォーラムを取得（WP_Queryを使用）
+		$current_forum_id = bbp_get_forum_id();
+		if ($current_forum_id) {
+			$sub_forums_query = new WP_Query(array(
+				'post_type' => bbp_get_forum_post_type(),
+				'post_parent' => $current_forum_id,
+				'posts_per_page' => -1,
+				'orderby' => 'menu_order',
+				'order' => 'ASC'
+			));
 
-		<?php do_action('bbp_theme_after_forum_sub_forums'); ?>
-
-		<?php bbp_forum_row_actions(); ?>
-
-	</li>
-
-	<!-- <li class="bbp-forum-topic-count !float-none !w-auto">トピック数 <?php // bbp_forum_topic_count(); 
-																		?></li> -->
-
-	<!-- <li class="bbp-forum-reply-count !float-none">返信数 <?php // bbp_show_lead_topic() ? bbp_forum_reply_count() : bbp_forum_post_count(); 
-															?></li> -->
-
-
-	<?php
-	// このフォーラムに属するトピック一覧を表示
-	if (bbp_has_topics(array('post_parent' => bbp_get_forum_id(), 'posts_per_page' => 5))) : ?>
-		<div class="bbp-forum-topics">
-			<div class="space-y-2 !mb-8">
-				<?php while (bbp_topics()) : bbp_the_topic(); ?>
-					<div class="flex items-center justify-between">
-						<a href="<?php bbp_topic_permalink(); ?>" class="text-base font-medium">
-							<?php bbp_topic_title(); ?>
-						</a>
-						<div class="text-xs text-gray-500 flex flex-col items-end">
-							<span>返信: <?php bbp_topic_reply_count(); ?></span>
-							<span class="ml-3"><?php echo date('m/d H:i', strtotime(get_post_field('post_modified', bbp_get_topic_id()))); ?></span>
-						</div>
+			if ($sub_forums_query->have_posts()) : ?>
+				<div class="bbp-sub-forums mt-6">
+					<div class="space-y-4 mb-6">
+						<?php while ($sub_forums_query->have_posts()) : $sub_forums_query->the_post(); ?>
+							<div class="bg-white rounded-sm p-4">
+								<a href="<?php bbp_get_forum_permalink(get_the_ID()); ?>" class="block">
+									<h4 class="font-medium !mt-0 mb-2"><?php the_title(); ?></h4>
+									<?php if (get_the_content()) : ?>
+										<p class="text-gray-600 mb-3"><?php echo wp_trim_words(get_the_content(), 20); ?></p>
+									<?php endif; ?>
+									<div class="text-gray-500 text-right">
+										<span>トピック: <?php echo bbp_get_forum_topic_count(get_the_ID()) ? bbp_get_forum_topic_count(get_the_ID()) : 0; ?></span>
+										<span class="ml-3">投稿: <?php echo bbp_get_forum_post_count(get_the_ID()) ? bbp_get_forum_post_count(get_the_ID()) : 0; ?></span>
+									</div>
+								</a>
+							</div>
+						<?php endwhile; ?>
 					</div>
-				<?php endwhile; ?>
-			</div>
-			<div class="text-center">
-				<a href="<?php bbp_forum_permalink(); ?>"
-					class="inline-block bg-blue-500 hover:bg-blue-500/80 !text-white hover:!text-white font-bold tracking-widest px-8 py-2 rounded-full">トピック一覧を見る</a>
-			</div>
-		</div>
-	<?php endif; ?>
+				</div>
+	</li>
+	<li>
 
+		<div class="text-center">
+			<a href="<?php bbp_forum_permalink(); ?>"
+				class="inline-block bg-blue-500 hover:bg-blue-500/80 !text-white hover:!text-white font-bold tracking-widest px-8 py-2 rounded-full">フォーラム一覧を見る</a>
+		</div>
+	</li>
+<?php endif;
+			wp_reset_postdata(); // クエリをリセット
+		}
+?>
+
+<?php do_action('bbp_theme_after_forum_sub_forums'); ?>
+
+<?php bbp_forum_row_actions(); ?>
+
+</li>
+
+<!-- <li class="bbp-forum-topic-count !float-none !w-auto">トピック数 <?php // bbp_forum_topic_count(); 
+																	?></li> -->
+
+<!-- <li class="bbp-forum-reply-count !float-none">返信数 <?php // bbp_show_lead_topic() ? bbp_forum_reply_count() : bbp_forum_post_count(); 
+														?></li> -->
+
+
+<?php
+// このフォーラムに属するトピック一覧を表示
+if (bbp_has_topics(array('post_parent' => bbp_get_forum_id(), 'posts_per_page' => 5))) : ?>
+	<div class="bbp-forum-topics">
+		<div class="space-y-2 !mb-8">
+			<?php while (bbp_topics()) : bbp_the_topic(); ?>
+				<div class="flex items-center justify-between">
+					<a href="<?php bbp_topic_permalink(); ?>" class="text-base font-medium">
+						<?php bbp_topic_title(); ?>
+					</a>
+					<div class="text-xs text-gray-500 flex flex-col items-end">
+						<span>返信: <?php bbp_topic_reply_count(); ?></span>
+						<span class="ml-3"><?php echo date('m/d H:i', strtotime(get_post_field('post_modified', bbp_get_topic_id()))); ?></span>
+					</div>
+				</div>
+			<?php endwhile; ?>
+		</div>
+	</div>
 	<li class="bbp-forum-freshness !float-none !w-auto">
 
 		<?php do_action('bbp_theme_before_forum_freshness_link'); ?>
@@ -102,4 +140,12 @@ defined('ABSPATH') || exit;
 
 		</p>
 	</li>
+	<li class="!mt-auto">
+		<div class="text-center">
+			<a href="<?php bbp_forum_permalink(); ?>"
+				class="inline-block bg-blue-500 hover:bg-blue-500/80 !text-white hover:!text-white font-bold tracking-widest px-8 py-2 rounded-full">トピック一覧を見る</a>
+		</div>
+	</li>
+<?php endif; ?>
+
 </ul><!-- #bbp-forum-<?php bbp_forum_id(); ?> -->

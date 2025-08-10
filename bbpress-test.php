@@ -92,9 +92,9 @@ function debug_bbpress_templates($template, $template_names, $load, $require_onc
     $display_template = $template ? $template : '見つかりませんでした';
 
     // デバッグ出力を条件付きで表示（ヘッダー送信エラーを防ぐ）
-    // if (is_user_logged_in() && !is_admin()) {
-    //     echo '<div style="background: #E9EEF6; font-size: 0.5rem;">選択されたテンプレート: ' . $display_template . '</div>';
-    // }
+    if (is_user_logged_in() && !is_admin()) {
+        // echo '<div style="background: #E9EEF6; font-size: 0.5rem;">選択されたテンプレート: ' . $display_template . '</div>';
+    }
 
     // 重要: テンプレートパスを変更せずにそのまま返す
     // このフィルターは監視用であり、実際のテンプレート選択は bbp_template_stack で行う
