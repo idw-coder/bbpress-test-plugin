@@ -253,6 +253,17 @@ function custom_topic_admin_links($links, $topic_id)
 }
 
 /**
+ * bbPressのDATETIMEエラーを修正
+ */
+add_filter('bbp_has_topics_query', function ($query_args) {
+    // フォーラムIDを確実に数値として扱う
+    if (isset($query_args['post_parent'])) {
+        $query_args['post_parent'] = intval($query_args['post_parent']);
+    }
+    return $query_args;
+});
+
+/**
  * メール送信テスト
  * メール送信テスト用のURL: https://domain.com/?mailtest=1
  */
