@@ -166,8 +166,16 @@
   height: 100%
 }
 
+.h-auto {
+  height: auto
+}
+
 .\!w-auto {
   width: auto !important
+}
+
+.w-full {
+  width: 100%
 }
 
 .grid-cols-1 {

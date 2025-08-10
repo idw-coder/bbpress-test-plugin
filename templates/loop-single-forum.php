@@ -12,9 +12,29 @@ defined('ABSPATH') || exit;
 // error_log('loop-single-forum.php');
 ?>
 <ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?> style="display: flex; flex-direction: column;">
+	<?php // サムネイルを表示
+	$thumbnail_url = get_forum_thumbnail_url(bbp_get_forum_id());
+	$default_image = plugin_dir_url(dirname(__FILE__)) . 'assets/img/no_image.png';
+	$image_url = $thumbnail_url ? $thumbnail_url : $default_image;
+	?>
+	<li class="!mb-6" style="margin: -2rem -2rem 1.5rem -2rem; width: calc(100% + 4rem); position: relative;">
+		<img src="<?php echo $image_url; ?>" alt="<?php bbp_forum_title(); ?>" class="w-full h-auto" style="aspect-ratio: 18/9; object-fit: cover;">
+		<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to  bottom, rgba(60, 60, 60, 0) 0%, rgba(60, 60, 60, 0.2) 100%); pointer-events: none;"></div>
+	</li>
 	<li class="bbp-forum-info !float-none !w-auto">
 
-		<?php if (bbp_is_user_home() && bbp_is_subscriptions()) : ?>
+		<?php // if (bbp_is_user_home() && bbp_is_subscriptions()) : 
+		?>
+
+		<?php
+		/**
+		 * TODO: debug
+		 * @var boolean
+		 * 
+		 * bbp_is_subscriptions() - 現在のページがユーザーの購読ページかどうかを判定
+		 * 購読ページでのみ表示したい要素（購読解除ボタンなど）の表示制御に使用
+		 */
+		if (bbp_is_subscriptions()) : ?>
 
 			<span class="bbp-row-actions">
 
@@ -30,9 +50,10 @@ defined('ABSPATH') || exit;
 
 		<?php do_action('bbp_theme_before_forum_title'); ?>
 
-		<a class="bbp-forum-title block !border-0 !border-b-4 !border-solid !border-gray-300 !text-center !text-xl !font-bold !pb-2 mb-6 relative flex items-center justify-center" href="<?php bbp_forum_permalink(); ?>">
+		<a class="bbp-forum-title block !border-0 !border-b-2 !border-solid !border-gray-300 !text-center !text-xl !font-bold !pb-2 mb-6 relative flex items-center justify-center" href="<?php bbp_forum_permalink(); ?>">
 			<?php bbp_forum_title(); ?>
-			<span class="bbp-forum-topic-count absolute !right-0 !text-xs !text-gray-500 flex items-center h-full"><?php bbp_forum_topic_count(); ?>件</span></a>
+			<span class="bbp-forum-topic-count absolute !right-0 !text-xs !text-gray-500 flex items-center h-full"><?php bbp_forum_topic_count(); ?>件</span>
+		</a>
 
 		<?php do_action('bbp_theme_after_forum_title'); ?>
 

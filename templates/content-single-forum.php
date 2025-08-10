@@ -29,8 +29,11 @@ defined('ABSPATH') || exit;
 		<?php // bbp_single_forum_description(); 
 		?>
 
-		<!-- フォーラム一覧で子フォーラムも表示 -->
-		<?php if (bbp_has_forums(array('post_parent' => 'any'))) : ?>
+		<?php if (bbp_has_forums()) : ?>
+
+			<!-- フォーラム一覧で子フォーラムも表示 -->
+			<?php // if (bbp_has_forums(array('post_parent' => 'any'))) : 
+			?>
 
 			<?php bbp_get_template_part('loop', 'forums'); ?>
 

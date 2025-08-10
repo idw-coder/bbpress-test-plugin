@@ -275,3 +275,122 @@ add_action('init', function () {
         exit;
     }
 });
+
+/**
+ * フォーラムとカテゴリーにサムネイル機能を追加
+ */
+
+// 管理画面でサムネイルフィールドを追加
+add_action('add_meta_boxes', 'add_forum_thumbnail_meta_box');
+function add_forum_thumbnail_meta_box()
+{
+    add_meta_box(
+        'forum_thumbnail',
+        'サムネイル画像',
+        'forum_thumbnail_meta_box_callback',
+        'forum',
+        'side',
+        'high'
+    );
+}
+
+// サムネイルフィールドのHTML
+function forum_thumbnail_meta_box_callback($post)
+{
+    wp_nonce_field('forum_thumbnail_nonce', 'forum_thumbnail_nonce');
+
+    $thumbnail_id = get_post_meta($post->ID, '_forum_thumbnail_id', true);
+    $thumbnail_url = wp_get_attachment_image_url($thumbnail_id, 'large');
+
+    echo '<div id="forum_thumbnail_container">';
+    if ($thumbnail_url) {
+        echo '<img src="' . esc_url($thumbnail_url) . '" style="max-width: 100%; height: auto; margin-bottom: 10px;" />';
+    }
+    echo '<input type="hidden" id="forum_thumbnail_id" name="forum_thumbnail_id" value="' . esc_attr($thumbnail_id) . '" />';
+    echo '<button type="button" id="upload_thumbnail_button" class="button">画像を選択</button>';
+    if ($thumbnail_id) {
+        echo ' <button type="button" id="remove_thumbnail_button" class="button">削除</button>';
+    }
+    echo '</div>';
+
+    echo '<script>
+    jQuery(document).ready(function($) {
+        $("#upload_thumbnail_button").click(function(e) {
+            e.preventDefault();
+            var image = wp.media({
+                title: "サムネイル画像を選択",
+                multiple: false
+            }).open().on("select", function() {
+                var uploaded_image = image.state().get("selection").first();
+                var image_url = uploaded_image.toJSON().sizes.thumbnail ? uploaded_image.toJSON().sizes.thumbnail.url : uploaded_image.toJSON().url;
+                $("#forum_thumbnail_container").html(
+                    \'<img src="\' + image_url + \'" style="max-width: 100%; height: auto; margin-bottom: 10px;" />\' +
+                    \'<input type="hidden" id="forum_thumbnail_id" name="forum_thumbnail_id" value="\' + uploaded_image.id + \'" />\' +
+                    \'<button type="button" id="upload_thumbnail_button" class="button">画像を選択</button>\' +
+                    \' <button type="button" id="remove_thumbnail_button" class="button">削除</button>\'
+                );
+            });
+        });
+        
+        $(document).on("click", "#remove_thumbnail_button", function() {
+            $("#forum_thumbnail_container").html(
+                \'<input type="hidden" id="forum_thumbnail_id" name="forum_thumbnail_id" value="" />\' +
+                \'<button type="button" id="upload_thumbnail_button" class="button">画像を選択</button>\'
+            );
+        });
+    });
+    </script>';
+}
+
+// サムネイルデータを保存
+add_action('save_post', 'save_forum_thumbnail');
+function save_forum_thumbnail($post_id)
+{
+    if (!isset($_POST['forum_thumbnail_nonce']) || !wp_verify_nonce($_POST['forum_thumbnail_nonce'], 'forum_thumbnail_nonce')) {
+        return;
+    }
+
+    if (defined('DOING_AUTOSAVE') && DOING_AUTOSAVE) {
+        return;
+    }
+
+    if (!current_user_can('edit_post', $post_id)) {
+        return;
+    }
+
+    if (isset($_POST['forum_thumbnail_id'])) {
+        update_post_meta($post_id, '_forum_thumbnail_id', sanitize_text_field($_POST['forum_thumbnail_id']));
+    }
+}
+
+// サムネイル画像を取得する関数
+function get_forum_thumbnail($forum_id = null, $size = 'large')
+{
+    if (!$forum_id) {
+        $forum_id = get_the_ID();
+    }
+
+    $thumbnail_id = get_post_meta($forum_id, '_forum_thumbnail_id', true);
+
+    if ($thumbnail_id) {
+        return wp_get_attachment_image($thumbnail_id, $size, false, array('class' => 'forum-thumbnail'));
+    }
+
+    return false;
+}
+
+// サムネイルURLを取得する関数
+function get_forum_thumbnail_url($forum_id = null, $size = 'large')
+{
+    if (!$forum_id) {
+        $forum_id = get_the_ID();
+    }
+
+    $thumbnail_id = get_post_meta($forum_id, '_forum_thumbnail_id', true);
+
+    if ($thumbnail_id) {
+        return wp_get_attachment_image_url($thumbnail_id, $size);
+    }
+
+    return false;
+}
