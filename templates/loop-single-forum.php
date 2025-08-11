@@ -83,18 +83,16 @@ defined('ABSPATH') || exit;
 				<div class="bbp-sub-forums mt-6">
 					<div class="space-y-4 mb-6">
 						<?php while ($sub_forums_query->have_posts()) : $sub_forums_query->the_post(); ?>
-							<div class="bg-white rounded-sm p-4">
-								<a href="<?php bbp_get_forum_permalink(get_the_ID()); ?>" class="block">
-									<h4 class="font-medium !mt-0 mb-2"><?php the_title(); ?></h4>
-									<?php if (get_the_content()) : ?>
-										<p class="text-gray-600 mb-3"><?php echo wp_trim_words(get_the_content(), 20); ?></p>
-									<?php endif; ?>
-									<div class="text-gray-500 text-right">
-										<span>トピック: <?php echo bbp_get_forum_topic_count(get_the_ID()) ? bbp_get_forum_topic_count(get_the_ID()) : 0; ?></span>
-										<span class="ml-3">投稿: <?php echo bbp_get_forum_post_count(get_the_ID()) ? bbp_get_forum_post_count(get_the_ID()) : 0; ?></span>
-									</div>
-								</a>
-							</div>
+							<a href="<?php echo get_permalink(); ?>" class="block bg-white rounded-sm p-4">
+								<h4 class="font-medium !mt-0 mb-2"><?php the_title(); ?></h4>
+								<?php if (get_the_content()) : ?>
+									<p class="text-gray-600 mb-3"><?php echo wp_trim_words(get_the_content(), 20); ?></p>
+								<?php endif; ?>
+								<div class="text-gray-500 text-right">
+									<span>トピック: <?php echo bbp_get_forum_topic_count(get_the_ID()) ? bbp_get_forum_topic_count(get_the_ID()) : 0; ?></span>
+									<span class="ml-3">投稿: <?php echo bbp_get_forum_post_count(get_the_ID()) ? bbp_get_forum_post_count(get_the_ID()) : 0; ?></span>
+								</div>
+							</a>
 						<?php endwhile; ?>
 					</div>
 				</div>

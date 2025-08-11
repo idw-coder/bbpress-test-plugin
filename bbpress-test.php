@@ -256,10 +256,28 @@ function custom_topic_admin_links($links, $topic_id)
  * bbPressのDATETIMEエラーを修正
  */
 add_filter('bbp_has_topics_query', function ($query_args) {
-    // フォーラムIDを確実に数値として扱う
-    if (isset($query_args['post_parent'])) {
-        $query_args['post_parent'] = intval($query_args['post_parent']);
+    // トピックタグページの場合はタグベースのクエリに変更
+    if (bbp_is_topic_tag()) {
+        $tag_id = bbp_get_topic_tag_id();
+        if ($tag_id) {
+            $query_args['post_type'] = 'topic';
+            $query_args['tax_query'] = array(
+                array(
+                    'taxonomy' => 'topic-tag',
+                    'field'    => 'term_id',
+                    'terms'    => $tag_id,
+                )
+            );
+            // トピックタグページではpost_parentを削除
+            unset($query_args['post_parent']);
+        }
+    } else {
+        // 通常のフォーラムページではpost_parentを数値に変換
+        if (isset($query_args['post_parent'])) {
+            $query_args['post_parent'] = intval($query_args['post_parent']);
+        }
     }
+
     return $query_args;
 });
 
