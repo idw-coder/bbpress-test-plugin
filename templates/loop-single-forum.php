@@ -11,15 +11,15 @@
 defined('ABSPATH') || exit;
 // error_log('loop-single-forum.php');
 ?>
-<ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?> style="display: flex; flex-direction: column;">
+<ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?> style="display: flex; flex-direction: column; padding: clamp(1rem, 2vw, 2rem)!important;">
 	<?php // サムネイルを表示
 	$thumbnail_url = get_forum_thumbnail_url(bbp_get_forum_id());
 	$default_image = plugin_dir_url(dirname(__FILE__)) . 'assets/img/no_image.png';
 	$image_url = $thumbnail_url ? $thumbnail_url : $default_image;
 	?>
 	<li class="!mb-6" style="margin: -2rem -2rem 1.5rem -2rem; width: calc(100% + 4rem); position: relative;">
-		<img src="<?php echo $image_url; ?>" alt="<?php bbp_forum_title(); ?>" class="w-full h-auto" style="aspect-ratio: 18/9; object-fit: cover;">
-		<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to  bottom, rgba(60, 60, 60, 0) 0%, rgba(60, 60, 60, 0.2) 100%); pointer-events: none;"></div>
+		<img src="<?php echo $image_url; ?>" alt="<?php bbp_forum_title(); ?>" class="w-full h-auto" style="aspect-ratio: 9/4; object-fit: cover;">
+		<div style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(to  bottom, rgba(120, 120, 120, 0.4) 0%, rgba(120, 120, 120, 0.2) 100%); pointer-events: none;"></div>
 	</li>
 	<li class="bbp-forum-info !float-none !w-auto">
 
@@ -97,8 +97,7 @@ defined('ABSPATH') || exit;
 					</div>
 				</div>
 	</li>
-	<li>
-
+	<li class="!mt-auto">
 		<div class="text-center">
 			<a href="<?php bbp_forum_permalink(); ?>"
 				class="inline-block bg-blue-500 hover:bg-blue-500/80 !text-white hover:!text-white font-bold tracking-widest px-8 py-2 rounded-full">フォーラム一覧を見る</a>
@@ -130,9 +129,9 @@ if (bbp_has_topics(array('post_parent' => bbp_get_forum_id(), 'posts_per_page' =
 			<?php while (bbp_topics()) : bbp_the_topic(); ?>
 				<div class="flex items-center justify-between">
 					<a href="<?php bbp_topic_permalink(); ?>" class="text-base font-medium">
-						<?php bbp_topic_title(); ?>
+						<?php echo wp_trim_words(bbp_get_topic_title(), 20, '...'); ?>
 					</a>
-					<div class="text-xs text-gray-500 flex flex-col items-end">
+					<div class="text-xs text-gray-500 flex flex-col items-end min-w-[30%]">
 						<span>返信: <?php bbp_topic_reply_count(); ?></span>
 						<span class="ml-3"><?php echo date('m/d H:i', strtotime(get_post_field('post_modified', bbp_get_topic_id()))); ?></span>
 					</div>
