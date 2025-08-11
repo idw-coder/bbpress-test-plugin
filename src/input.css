@@ -8,6 +8,7 @@
   #bbpress-forums {
     @apply font-sans;
     /* font-family: 'Noto Sans JP', 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic', 'Meiryo', sans-serif; */
+    @apply !overflow-visible;
   }
   
   /* bbPressコンテナ内のリンクスタイル */

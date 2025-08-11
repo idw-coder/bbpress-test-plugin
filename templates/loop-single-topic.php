@@ -47,7 +47,8 @@ defined('ABSPATH') || exit;
 
 		<?php do_action('bbp_theme_before_topic_title'); ?>
 
-		<a class="bbp-topic-permalink text-lg font-bold !text-gray-800 hover:!text-gray-600 hover:!underline inline-block mb-4" href="<?php bbp_topic_permalink(); ?>"><?php bbp_topic_title(); ?></a>
+		<a class="bbp-topic-permalink text-lg font-bold inline-block mb-1" href="<?php bbp_topic_permalink(); ?>">
+			<?php echo wp_trim_words(bbp_get_topic_title(), 40, '...'); ?></a>
 
 		<?php do_action('bbp_theme_after_topic_title'); ?>
 
