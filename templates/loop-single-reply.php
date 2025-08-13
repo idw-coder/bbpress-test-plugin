@@ -18,18 +18,18 @@ if (!function_exists('get_user_background_color')) {
         // ユーザーIDをハッシュして一貫した数値を生成
         $hash = crc32($user_id);
         
-        // 色の配列（背景色とボーダー色のペア）
+        // 色の配列（青系統をベースにした落ち着いた色合い）
         $colors = [
-            ['bg' => '!bg-blue-50', 'border' => '!border-blue-300'],
-            ['bg' => '!bg-green-50', 'border' => '!border-green-300'],
-            ['bg' => '!bg-yellow-50', 'border' => '!border-yellow-300'],
-            ['bg' => '!bg-pink-50', 'border' => '!border-pink-300'],
-            ['bg' => '!bg-purple-50', 'border' => '!border-purple-300'],
-            ['bg' => '!bg-indigo-50', 'border' => '!border-indigo-300'],
-            ['bg' => '!bg-red-50', 'border' => '!border-red-300'],
-            ['bg' => '!bg-orange-50', 'border' => '!border-orange-300'],
-            ['bg' => '!bg-teal-50', 'border' => '!border-teal-300'],
-            ['bg' => '!bg-cyan-50', 'border' => '!border-cyan-300']
+            ['bg' => '!bg-blue-50', 'border' => '!border-blue-200'],
+            ['bg' => '!bg-slate-50', 'border' => '!border-slate-200'],
+            ['bg' => '!bg-gray-50', 'border' => '!border-gray-200'],
+            ['bg' => '!bg-indigo-50', 'border' => '!border-indigo-200'],
+            ['bg' => '!bg-sky-50', 'border' => '!border-sky-200'],
+            ['bg' => '!bg-blue-100', 'border' => '!border-blue-300'],
+            ['bg' => '!bg-slate-100', 'border' => '!border-slate-300'],
+            ['bg' => '!bg-gray-100', 'border' => '!border-gray-300'],
+            ['bg' => '!bg-indigo-100', 'border' => '!border-indigo-300'],
+            ['bg' => '!bg-sky-100', 'border' => '!border-sky-300']
         ];
         
         // ハッシュ値を使って色を選択（同じユーザーIDなら常に同じ色）
