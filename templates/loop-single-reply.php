@@ -67,16 +67,20 @@ defined('ABSPATH') || exit;
 			<?php do_action('bbp_theme_after_reply_content'); ?>
 
 			<?php
-			// いいね機能
 			$reply_id = bbp_get_reply_id();
 			$like_url = get_like_url($reply_id);
 			$current_likes = (int) get_post_meta($reply_id, 'reply_likes', true);
 			?>
-			<div class="like-section mt-2">
-				<a href="<?php echo esc_url($like_url); ?>" class="like-link text-blue-600 hover:text-blue-800">いいね</a>
-				<span class="like-count text-gray-600">(<?php echo $current_likes; ?>)</span>
+			
+			<!-- 最初のトピックのにはいいね機能を表示しない -->
+			<?php if (bbp_get_reply_topic_id() === bbp_get_topic_id(0)) : ?>
+			<div class=" inline-block px-2 py-1 bg-gray-100 rounded-full border-solid border-2 border-gray-200">
+				<a href="<?php echo esc_url($like_url); ?>" class="!flex items-center gap-1 !text-pink-500 hover:!text-pink-600 !no-underline">
+					<i class="fas fa-heart !text-pink-400 hover:text-pink-600"></i><span>いいね</span>
+					<span class="font-bold"><?php echo $current_likes; ?></span>
+				</a>
 			</div>
-
+			<?php endif; ?>
 		</div><!-- .bbp-reply-content -->
 	</div><!-- .reply -->
 </div>

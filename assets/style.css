@@ -127,10 +127,6 @@
   margin-right: 0.25rem
 }
 
-.mt-2 {
-  margin-top: 0.5rem
-}
-
 .mt-6 {
   margin-top: 1.5rem
 }
@@ -141,6 +137,10 @@
 
 .inline-block {
   display: inline-block
+}
+
+.\!flex {
+  display: flex !important
 }
 
 .flex {
@@ -193,6 +193,10 @@
 
 .justify-between {
   justify-content: space-between
+}
+
+.gap-1 {
+  gap: 0.25rem
 }
 
 .gap-4 {
@@ -296,6 +300,11 @@
   background-color: rgb(59 130 246 / var(--tw-bg-opacity, 1))
 }
 
+.bg-gray-100 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(243 244 246 / var(--tw-bg-opacity, 1))
+}
+
 .bg-white {
   --tw-bg-opacity: 1;
   background-color: rgb(255 255 255 / var(--tw-bg-opacity, 1))
@@ -392,14 +401,19 @@
   color: rgb(107 114 128 / var(--tw-text-opacity, 1)) !important
 }
 
+.\!text-pink-400 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(244 114 182 / var(--tw-text-opacity, 1)) !important
+}
+
+.\!text-pink-500 {
+  --tw-text-opacity: 1 !important;
+  color: rgb(236 72 153 / var(--tw-text-opacity, 1)) !important
+}
+
 .\!text-white {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important
-}
-
-.text-blue-600 {
-  --tw-text-opacity: 1;
-  color: rgb(37 99 235 / var(--tw-text-opacity, 1))
 }
 
 .text-blue-800 {
@@ -415,6 +429,10 @@
 .text-gray-600 {
   --tw-text-opacity: 1;
   color: rgb(75 85 99 / var(--tw-text-opacity, 1))
+}
+
+.\!no-underline {
+  text-decoration-line: none !important
 }
 
 .shadow-sm {
@@ -438,12 +456,17 @@
   background-color: rgb(59 130 246 / 0.8)
 }
 
+.hover\:\!text-pink-600:hover {
+  --tw-text-opacity: 1 !important;
+  color: rgb(219 39 119 / var(--tw-text-opacity, 1)) !important
+}
+
 .hover\:\!text-white:hover {
   --tw-text-opacity: 1 !important;
   color: rgb(255 255 255 / var(--tw-text-opacity, 1)) !important
 }
 
-.hover\:text-blue-800:hover {
+.hover\:text-pink-600:hover {
   --tw-text-opacity: 1;
-  color: rgb(30 64 175 / var(--tw-text-opacity, 1))
+  color: rgb(219 39 119 / var(--tw-text-opacity, 1))
 }

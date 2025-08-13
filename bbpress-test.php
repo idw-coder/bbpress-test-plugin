@@ -22,6 +22,14 @@ function bbpress_override_enqueue_tailwind()
             filemtime($css_file) // ファイル更新時刻をバージョンに使用
         );
     }
+    
+    // Font Awesomeを読み込み
+    wp_enqueue_style(
+        'font-awesome',
+        'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css',
+        array(),
+        '6.4.0'
+    );
 }
 
 /**
@@ -456,4 +464,25 @@ function handle_like_request() {
             exit;
         }
     }
+}
+
+/**
+ * ユーザーの総いいね数を取得
+ */
+function get_user_total_likes($user_id) {
+    global $wpdb;
+    
+    $reply_post_type = function_exists('bbp_get_reply_post_type') ? bbp_get_reply_post_type() : 'reply';
+    
+    $total_likes = $wpdb->get_var($wpdb->prepare(
+        "SELECT COALESCE(SUM(CAST(pm.meta_value AS UNSIGNED)), 0) as total_likes
+         FROM {$wpdb->posts} p
+         LEFT JOIN {$wpdb->postmeta} pm ON p.ID = pm.post_id AND pm.meta_key = 'reply_likes'
+         WHERE p.post_author = %d 
+         AND p.post_type = %s 
+         AND p.post_status = 'publish'",
+        $user_id, $reply_post_type
+    ));
+    
+    return (int) $total_likes;
 }
