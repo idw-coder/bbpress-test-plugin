@@ -27,7 +27,7 @@ do_action('bbp_template_before_forums_loop'); ?>
 
     </li><!-- .bbp-header -->
 
-    <li class="bbp-body flex flex-wrap gap-4 py-8">
+    <li class="bbp-body flex flex-wrap gap-8 py-8">
 
         <?php while (bbp_forums()) : bbp_the_forum(); ?>
 
