@@ -412,3 +412,48 @@ function get_forum_thumbnail_url($forum_id = null, $size = 'large')
 
     return false;
 }
+
+/**
+ * いいね機能
+ */
+
+// 返信のいいね数を更新（メタ情報が存在しない場合は自動的に追加）
+function my_add_like_to_reply($reply_id)
+{
+    $likes = (int) get_post_meta($reply_id, 'reply_likes', true);
+    update_post_meta($reply_id, 'reply_likes', $likes + 1);
+}
+
+// いいねリンクのURLを作成
+function get_like_url($reply_id) {
+    return add_query_arg(array(
+        'action' => 'add_like',
+        'reply_id' => $reply_id,
+        'nonce' => wp_create_nonce('add_like_nonce')
+    ), home_url());
+}
+
+// いいね処理のエンドポイント
+add_action('init', 'handle_like_request');
+function handle_like_request() {
+    if (isset($_GET['action']) && $_GET['action'] === 'add_like') {
+        if (!wp_verify_nonce($_GET['nonce'], 'add_like_nonce')) {
+            wp_die('セキュリティチェックに失敗しました');
+        }
+        
+        $reply_id = (int) $_GET['reply_id'];
+        
+        // リプライが存在するかチェック
+        if (get_post($reply_id)) {
+            my_add_like_to_reply($reply_id);
+            
+            // 元のページにリダイレクト（リファラーを使用）
+            $redirect_url = wp_get_referer();
+            if (!$redirect_url) {
+                $redirect_url = home_url();
+            }
+            wp_redirect($redirect_url);
+            exit;
+        }
+    }
+}

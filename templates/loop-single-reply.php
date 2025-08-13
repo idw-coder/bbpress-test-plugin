@@ -11,7 +11,7 @@
 defined('ABSPATH') || exit;
 
 ?>
-<div class="rounded-md shadow-sm overflow-hidden mb-4">
+<div class="rounded-md shadow-sm overflow-hidden border-solid border-2 border-gray-200 mb-4">
 	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none">
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>
@@ -65,6 +65,17 @@ defined('ABSPATH') || exit;
 			<?php bbp_reply_content(); ?>
 
 			<?php do_action('bbp_theme_after_reply_content'); ?>
+
+			<?php
+			// いいね機能
+			$reply_id = bbp_get_reply_id();
+			$like_url = get_like_url($reply_id);
+			$current_likes = (int) get_post_meta($reply_id, 'reply_likes', true);
+			?>
+			<div class="like-section mt-2">
+				<a href="<?php echo esc_url($like_url); ?>" class="like-link text-blue-600 hover:text-blue-800">いいね</a>
+				<span class="like-count text-gray-600">(<?php echo $current_likes; ?>)</span>
+			</div>
 
 		</div><!-- .bbp-reply-content -->
 	</div><!-- .reply -->
