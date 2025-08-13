@@ -10,9 +10,44 @@
 // Exit if accessed directly
 defined('ABSPATH') || exit;
 
+/**
+ * ユーザーIDに基づいて一貫した背景色を生成する関数
+ */
+if (!function_exists('get_user_background_color')) {
+    function get_user_background_color($user_id) {
+        // ユーザーIDをハッシュして一貫した数値を生成
+        $hash = crc32($user_id);
+        
+        // 色の配列（背景色とボーダー色のペア）
+        $colors = [
+            ['bg' => '!bg-blue-50', 'border' => '!border-blue-300'],
+            ['bg' => '!bg-green-50', 'border' => '!border-green-300'],
+            ['bg' => '!bg-yellow-50', 'border' => '!border-yellow-300'],
+            ['bg' => '!bg-pink-50', 'border' => '!border-pink-300'],
+            ['bg' => '!bg-purple-50', 'border' => '!border-purple-300'],
+            ['bg' => '!bg-indigo-50', 'border' => '!border-indigo-300'],
+            ['bg' => '!bg-red-50', 'border' => '!border-red-300'],
+            ['bg' => '!bg-orange-50', 'border' => '!border-orange-300'],
+            ['bg' => '!bg-teal-50', 'border' => '!border-teal-300'],
+            ['bg' => '!bg-cyan-50', 'border' => '!border-cyan-300']
+        ];
+        
+        // ハッシュ値を使って色を選択（同じユーザーIDなら常に同じ色）
+        $color_index = abs($hash) % count($colors);
+        
+        return $colors[$color_index];
+    }
+}
+
+// 現在のリプライのユーザーIDを取得
+$reply_author_id = bbp_get_reply_author_id();
+$user_colors = get_user_background_color($reply_author_id);
+$user_bg_color = $user_colors['bg'];
+$user_border_color = $user_colors['border'];
+
 ?>
-<div class="rounded-md shadow-sm overflow-hidden border-solid border-2 border-gray-200 mb-4">
-	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none">
+<div class="rounded-md shadow-sm overflow-hidden border-solid border-2 mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
+	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none !bg-white">
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>
 
@@ -36,7 +71,7 @@ defined('ABSPATH') || exit;
 		</div><!-- .bbp-meta -->
 	</div><!-- #post-<?php bbp_reply_id(); ?> -->
 
-	<div <?php bbp_reply_class(); ?>>
+	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important;">
 		<div class="bbp-reply-author">
 
 			<?php do_action('bbp_theme_before_reply_author_details'); ?>
