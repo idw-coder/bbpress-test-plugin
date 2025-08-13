@@ -44,7 +44,7 @@ $user_bg_color = $user_colors['bg'];
 $user_border_color = $user_colors['border'];
 
 ?>
-<div class="rounded-md shadow-sm overflow-hidden border-solid border-2 mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
+<div class="rounded-sm shadow-sm overflow-hidden border-solid border mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
 	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none !bg-white">
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>
