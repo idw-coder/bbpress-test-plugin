@@ -24,12 +24,10 @@ if (!function_exists('get_user_background_color')) {
             ['bg' => '!bg-slate-50', 'border' => '!border-slate-200'],
             ['bg' => '!bg-gray-50', 'border' => '!border-gray-200'],
             ['bg' => '!bg-indigo-50', 'border' => '!border-indigo-200'],
-            ['bg' => '!bg-sky-50', 'border' => '!border-sky-200'],
             ['bg' => '!bg-blue-100', 'border' => '!border-blue-300'],
             ['bg' => '!bg-slate-100', 'border' => '!border-slate-300'],
             ['bg' => '!bg-gray-100', 'border' => '!border-gray-300'],
             ['bg' => '!bg-indigo-100', 'border' => '!border-indigo-300'],
-            ['bg' => '!bg-sky-100', 'border' => '!border-sky-300']
         ];
         
         // ハッシュ値を使って色を選択（同じユーザーIDなら常に同じ色）
