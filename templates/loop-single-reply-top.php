@@ -76,7 +76,12 @@ $user_border_color = $user_colors['border'];
 	</div>
 
 	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important; display: flex; gap: 1rem; padding: 1rem;">
-		<div class="bbp-reply-content flex-1 !float-none">
+		<style>
+			.bbp-reply-content>*:not(:first-child) {
+				margin-top: 8px;
+			}
+		</style>
+		<div class="bbp-reply-content flex-1 !float-none !ml-0">
 
 			<?php do_action('bbp_theme_before_reply_content'); ?>
 
