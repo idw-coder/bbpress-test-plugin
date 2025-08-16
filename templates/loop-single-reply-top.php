@@ -44,7 +44,7 @@ $user_bg_color = $user_colors['bg'];
 $user_border_color = $user_colors['border'];
 
 ?>
-<div class="rounded-lg shadow-sm overflow-hidden border-solid border mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
+<div class="rounded-lg shadow-sm overflow-hidden border border-gray-200 mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
 	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none !bg-white">
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>
@@ -69,8 +69,26 @@ $user_border_color = $user_colors['border'];
 		</div><!-- .bbp-meta -->
 	</div><!-- #post-<?php bbp_reply_id(); ?> -->
 
-	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important;">
-		<div class="bbp-reply-author">
+	<div class="px-4 py-2">
+		<p class="text-lg font-medium text-gray-700">
+			<?php echo get_the_title(get_post_meta(bbp_get_reply_id(), '_bbp_topic_id', true)); ?>
+		</p>
+	</div>
+
+	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important; display: flex; gap: 1rem; padding: 1rem;">
+		<div class="bbp-reply-content flex-1 !float-none">
+
+			<?php do_action('bbp_theme_before_reply_content'); ?>
+
+			<?php bbp_reply_content(); ?>
+
+			<?php do_action('bbp_theme_after_reply_content'); ?>
+
+			<!-- 最初のトピックのにはいいね機能を表示しない -->
+
+		</div><!-- .bbp-reply-content -->
+
+		<div class="bbp-reply-author !float-none">
 
 			<?php do_action('bbp_theme_before_reply_author_details'); ?>
 
@@ -90,28 +108,5 @@ $user_border_color = $user_colors['border'];
 			<?php do_action('bbp_theme_after_reply_author_details'); ?>
 
 		</div><!-- .bbp-reply-author -->
-
-		<div class="bbp-reply-content">
-
-			<?php do_action('bbp_theme_before_reply_content'); ?>
-
-			<?php bbp_reply_content(); ?>
-
-			<?php do_action('bbp_theme_after_reply_content'); ?>
-
-			<?php
-			$reply_id = bbp_get_reply_id();
-			$like_url = get_like_url($reply_id);
-			$current_likes = (int) get_post_meta($reply_id, 'reply_likes', true);
-			?>
-
-			<!-- いいね機能 -->
-			<div class=" inline-block px-2 py-1 bg-gray-100 rounded-full border-solid border-2 border-gray-200 mt-6 mx-auto">
-				<a href="<?php echo esc_url($like_url); ?>" class="!flex items-center gap-1 !text-pink-500 hover:!text-pink-600 !no-underline">
-					<i class="fas fa-heart !text-pink-400 hover:text-pink-600"></i><span>いいね</span>
-					<span class="font-bold"><?php echo $current_likes; ?></span>
-				</a>
-			</div>
-		</div><!-- .bbp-reply-content -->
 	</div><!-- .reply -->
 </div>

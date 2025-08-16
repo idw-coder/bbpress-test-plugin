@@ -32,7 +32,11 @@ do_action('bbp_template_before_replies_loop'); ?>
 
 			<?php while (bbp_replies()) : bbp_the_reply(); ?>
 
-				<?php bbp_get_template_part('loop', 'single-reply'); ?>
+				<?php if (bbp_get_reply_topic_id() === bbp_get_topic_id(0)) : ?>
+					<?php bbp_get_template_part('loop', 'single-reply'); ?>
+				<?php else : ?>
+					<?php bbp_get_template_part('loop', 'single-reply-top'); ?>
+				<?php endif; ?>
 
 			<?php endwhile; ?>
 

@@ -22,7 +22,7 @@ function bbpress_override_enqueue_tailwind()
             filemtime($css_file) // ファイル更新時刻をバージョンに使用
         );
     }
-    
+
     // Font Awesomeを読み込み
     wp_enqueue_style(
         'font-awesome',
@@ -433,7 +433,8 @@ function my_add_like_to_reply($reply_id)
 }
 
 // いいねリンクのURLを作成
-function get_like_url($reply_id) {
+function get_like_url($reply_id)
+{
     return add_query_arg(array(
         'action' => 'add_like',
         'reply_id' => $reply_id,
@@ -443,18 +444,19 @@ function get_like_url($reply_id) {
 
 // いいね処理のエンドポイント
 add_action('init', 'handle_like_request');
-function handle_like_request() {
+function handle_like_request()
+{
     if (isset($_GET['action']) && $_GET['action'] === 'add_like') {
         if (!wp_verify_nonce($_GET['nonce'], 'add_like_nonce')) {
             wp_die('セキュリティチェックに失敗しました');
         }
-        
+
         $reply_id = (int) $_GET['reply_id'];
-        
+
         // リプライが存在するかチェック
         if (get_post($reply_id)) {
             my_add_like_to_reply($reply_id);
-            
+
             // 元のページにリダイレクト（リファラーを使用）
             $redirect_url = wp_get_referer();
             if (!$redirect_url) {
@@ -469,11 +471,12 @@ function handle_like_request() {
 /**
  * ユーザーの総いいね数を取得
  */
-function get_user_total_likes($user_id) {
+function get_user_total_likes($user_id)
+{
     global $wpdb;
-    
+
     $reply_post_type = function_exists('bbp_get_reply_post_type') ? bbp_get_reply_post_type() : 'reply';
-    
+
     $total_likes = $wpdb->get_var($wpdb->prepare(
         "SELECT COALESCE(SUM(CAST(pm.meta_value AS UNSIGNED)), 0) as total_likes
          FROM {$wpdb->posts} p
@@ -481,8 +484,9 @@ function get_user_total_likes($user_id) {
          WHERE p.post_author = %d 
          AND p.post_type = %s 
          AND p.post_status = 'publish'",
-        $user_id, $reply_post_type
+        $user_id,
+        $reply_post_type
     ));
-    
+
     return (int) $total_likes;
 }
