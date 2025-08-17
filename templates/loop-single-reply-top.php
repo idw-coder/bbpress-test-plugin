@@ -69,31 +69,15 @@ $user_border_color = $user_colors['border'];
 		</div><!-- .bbp-meta -->
 	</div><!-- #post-<?php bbp_reply_id(); ?> -->
 
-	<div class="px-4 py-2">
+	<div class="px-4 py-2 border-b border-white border-b-4 <?php echo esc_attr($user_bg_color); ?>">
 		<p class="text-lg font-medium text-gray-700">
 			<?php echo get_the_title(get_post_meta(bbp_get_reply_id(), '_bbp_topic_id', true)); ?>
 		</p>
 	</div>
 
-	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important; display: flex; gap: 1rem; padding: 1rem;">
-		<style>
-			.bbp-reply-content>*:not(:first-child) {
-				margin-top: 8px;
-			}
-		</style>
-		<div class="bbp-reply-content flex-1 !float-none !ml-0">
+	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important;">
 
-			<?php do_action('bbp_theme_before_reply_content'); ?>
-
-			<?php bbp_reply_content(); ?>
-
-			<?php do_action('bbp_theme_after_reply_content'); ?>
-
-			<!-- 最初のトピックのにはいいね機能を表示しない -->
-
-		</div><!-- .bbp-reply-content -->
-
-		<div class="bbp-reply-author !float-none">
+		<div class="bbp-reply-author !float-right">
 
 			<?php do_action('bbp_theme_before_reply_author_details'); ?>
 
@@ -113,5 +97,22 @@ $user_border_color = $user_colors['border'];
 			<?php do_action('bbp_theme_after_reply_author_details'); ?>
 
 		</div><!-- .bbp-reply-author -->
+
+		<style>
+			.bbp-reply-content>*:not(:first-child) {
+				margin-top: 8px;
+			}
+		</style>
+		<div class="bbp-reply-content !float-left !ml-4">
+
+			<?php do_action('bbp_theme_before_reply_content'); ?>
+
+			<?php bbp_reply_content(); ?>
+
+			<?php do_action('bbp_theme_after_reply_content'); ?>
+
+			<!-- 最初のトピックのにはいいね機能を表示しない -->
+
+		</div><!-- .bbp-reply-content -->
 	</div><!-- .reply -->
 </div>
