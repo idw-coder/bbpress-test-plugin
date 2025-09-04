@@ -21,13 +21,13 @@ if (!function_exists('get_user_background_color')) {
 
 		// 色の配列（青系統をベースにした落ち着いた色合い）
 		$colors = [
-			['bg' => '!bg-blue-50', 'border' => '!border-blue-200'],
-			['bg' => '!bg-stone-50', 'border' => '!border-stone-200'],
-			['bg' => '!bg-gray-50', 'border' => '!border-gray-200'],
-			['bg' => '!bg-indigo-50', 'border' => '!border-indigo-200'],
-			['bg' => '!bg-blue-100', 'border' => '!border-blue-300'],
-			['bg' => '!bg-slate-100', 'border' => '!border-slate-300'],
-			['bg' => '!bg-gray-100', 'border' => '!border-gray-300'],
+			['bg' => '!bg-blue-50', 'border' => '!border-blue-400'],
+			['bg' => '!bg-stone-50', 'border' => '!border-stone-400'],
+			['bg' => '!bg-gray-50', 'border' => '!border-gray-400'],
+			['bg' => '!bg-indigo-50', 'border' => '!border-indigo-400'],
+			['bg' => '!bg-blue-100', 'border' => '!border-blue-500'],
+			['bg' => '!bg-slate-100', 'border' => '!border-slate-500'],
+			['bg' => '!bg-gray-100', 'border' => '!border-gray-500'],
 		];
 
 		// ハッシュ値を使って色を選択（同じユーザーIDなら常に同じ色）
@@ -44,7 +44,7 @@ $user_bg_color = $user_colors['bg'];
 $user_border_color = $user_colors['border'];
 
 ?>
-<div class="rounded-lg shadow-sm overflow-hidden border border-gray-200 mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
+<div class="rounded-lg shadow-sm !border-solid border mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
 	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none !bg-white">
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>

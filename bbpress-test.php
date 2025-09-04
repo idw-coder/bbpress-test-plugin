@@ -277,7 +277,7 @@ add_filter('bbp_has_topics_query', function ($query_args) {
                 )
             );
             // トピックタグページではpost_parentを削除
-            unset($query_args['post_parent']);
+            // unset($query_args['post_parent']);
         }
     } else {
         // 通常のフォーラムページではpost_parentを数値に変換
@@ -489,4 +489,37 @@ function get_user_total_likes($user_id)
     ));
 
     return (int) $total_likes;
+}
+
+
+
+// 最も早いタイミングで初期化
+if (!isset($_REQUEST['post_parent'])) {
+    $_REQUEST['post_parent'] = 0;
+}
+
+// bbPressの内部処理を直接フック
+add_action('bbp_init', 'fix_bbpress_post_parent_direct', 1);
+function fix_bbpress_post_parent_direct() {
+    if (!isset($_REQUEST['post_parent'])) {
+        $_REQUEST['post_parent'] = 0;
+    }
+}
+
+// リクエスト処理中にも継続的に監視
+add_action('wp_loaded', 'monitor_post_parent');
+function monitor_post_parent() {
+    if (!isset($_REQUEST['post_parent'])) {
+        $_REQUEST['post_parent'] = 0;
+        error_log('wp_loaded: post_parent fixed');
+    }
+}
+
+// テンプレート読み込み直前にも確認
+add_action('template_redirect', 'final_post_parent_check');
+function final_post_parent_check() {
+    if (!isset($_REQUEST['post_parent'])) {
+        $_REQUEST['post_parent'] = 0;
+        error_log('template_redirect: post_parent fixed');
+    }
 }
