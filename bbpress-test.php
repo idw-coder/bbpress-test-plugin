@@ -99,9 +99,11 @@ function debug_bbpress_templates($template, $template_names, $load, $require_onc
     // 最終的に選択されたテンプレートを表示
     $display_template = $template ? $template : '見つかりませんでした';
 
-    // デバッグ出力を条件付きで表示（ヘッダー送信エラーを防ぐ）
+    /***************************************************************************
+     * デバッグ出力を条件付きで表示（ヘッダー送信エラーを防ぐ）
+     ***************************************************************************/
     if (is_user_logged_in() && !is_admin()) {
-        // echo '<div style="background: #E9EEF6; font-size: 0.5rem;">選択されたテンプレート: ' . $display_template . '</div>';
+        // echo '<div style="background: #E9EEF6; font-size: 1rem;">選択されたテンプレート: ' . $display_template . '</div>';
     }
 
     // 重要: テンプレートパスを変更せずにそのまま返す

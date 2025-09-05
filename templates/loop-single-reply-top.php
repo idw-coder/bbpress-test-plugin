@@ -21,13 +21,13 @@ if (!function_exists('get_user_background_color')) {
 
 		// 色の配列（青系統をベースにした落ち着いた色合い）
 		$colors = [
-			['bg' => '!bg-blue-50', 'border' => '!border-blue-400'],
-			['bg' => '!bg-stone-50', 'border' => '!border-stone-400'],
-			['bg' => '!bg-gray-50', 'border' => '!border-gray-400'],
-			['bg' => '!bg-indigo-50', 'border' => '!border-indigo-400'],
-			['bg' => '!bg-blue-100', 'border' => '!border-blue-500'],
-			['bg' => '!bg-slate-100', 'border' => '!border-slate-500'],
-			['bg' => '!bg-gray-100', 'border' => '!border-gray-500'],
+			['bg' => '!bg-blue-100', 'border' => '!border-blue-400'],
+			['bg' => '!bg-stone-100', 'border' => '!border-stone-400'],
+			['bg' => '!bg-gray-200', 'border' => '!border-gray-400'],
+			['bg' => '!bg-indigo-100', 'border' => '!border-indigo-400'],
+			['bg' => '!bg-blue-200', 'border' => '!border-blue-500'],
+			['bg' => '!bg-slate-200', 'border' => '!border-slate-500'],
+			['bg' => '!bg-gray-300', 'border' => '!border-gray-500'],
 		];
 
 		// ハッシュ値を使って色を選択（同じユーザーIDなら常に同じ色）
@@ -45,7 +45,7 @@ $user_border_color = $user_colors['border'];
 
 ?>
 <div class="rounded-lg shadow-sm !border-solid border mb-4 <?php echo esc_attr($user_bg_color); ?> <?php echo esc_attr($user_border_color); ?>">
-	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none !bg-white">
+	<div id="post-<?php bbp_reply_id(); ?>" class="bbp-reply-header !border-none !bg-white rounded-t-lg">
 		<div class="bbp-meta">
 			<span class="bbp-reply-post-date"><?php bbp_reply_post_date(); ?></span>
 
@@ -69,7 +69,7 @@ $user_border_color = $user_colors['border'];
 		</div><!-- .bbp-meta -->
 	</div><!-- #post-<?php bbp_reply_id(); ?> -->
 
-	<div class="px-4 py-2 border-b border-white border-b-4 <?php echo esc_attr($user_bg_color); ?>">
+	<div class="px-4 py-2 border-solid border-b-4 border-t-0 border-l-0 border-r-0 border-b-white <?php echo esc_attr($user_bg_color); ?>">
 		<p class="text-lg font-medium text-gray-700">
 			<?php echo get_the_title(get_post_meta(bbp_get_reply_id(), '_bbp_topic_id', true)); ?>
 		</p>
@@ -103,7 +103,7 @@ $user_border_color = $user_colors['border'];
 				margin-top: 8px;
 			}
 		</style>
-		<div class="bbp-reply-content !float-left !ml-4">
+		<div class="bbp-reply-content !ml-4">
 
 			<?php do_action('bbp_theme_before_reply_content'); ?>
 
