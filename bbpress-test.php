@@ -2,7 +2,7 @@
 /*
  * Plugin Name: bbPress Template Override
  * Description: bbPressのテンプレートをカスタマイズするプラグイン
- * Version: 1.0
+ * Version: 1.2
  * Author: T.I.
 */
 

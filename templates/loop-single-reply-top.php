@@ -77,7 +77,7 @@ $user_border_color = $user_colors['border'];
 
 	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important;">
 
-		<div class="bbp-reply-author !float-right">
+		<div class="bbp-reply-author pt-2 !float-right">
 
 			<?php do_action('bbp_theme_before_reply_author_details'); ?>
 

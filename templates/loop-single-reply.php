@@ -70,7 +70,7 @@ $user_border_color = $user_colors['border'];
 	</div><!-- #post-<?php bbp_reply_id(); ?> -->
 
 	<div <?php bbp_reply_class(); ?> style="background-color: transparent!important;">
-		<div class="bbp-reply-author">
+		<div class="bbp-reply-author pt-2">
 
 			<?php do_action('bbp_theme_before_reply_author_details'); ?>
 
