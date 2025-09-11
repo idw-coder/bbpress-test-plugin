@@ -11,7 +11,7 @@
 defined('ABSPATH') || exit;
 // error_log('loop-single-forum.php');
 ?>
-<ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?> style="display: flex; flex-direction: column; padding: clamp(1rem, 2vw, 2rem)!important;">
+<ul id="bbp-forum-<?php bbp_forum_id(); ?>" <?php bbp_forum_class(); ?> style="min-width: 48%; display: flex; flex-direction: column; padding: clamp(1rem, 2vw, 2rem)!important;">
 	<?php // サムネイルを表示
 	$thumbnail_url = get_forum_thumbnail_url(bbp_get_forum_id());
 	$default_image = plugin_dir_url(dirname(__FILE__)) . 'assets/img/no_image.png';

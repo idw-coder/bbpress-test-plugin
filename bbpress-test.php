@@ -2,7 +2,7 @@
 /*
  * Plugin Name: bbPress Template Override
  * Description: bbPressのテンプレートをカスタマイズするプラグイン
- * Version: 1.2
+ * Version: 1.4
  * Author: T.I.
 */
 
@@ -424,7 +424,14 @@ function get_forum_thumbnail_url($forum_id = null, $size = 'large')
 }
 
 /**
- * いいね機能
+ * いいね機能 
+ * 
+ * テーブル構造例
+ * +---------+---------+-------------+-------------+
+ * | meta_id | post_id | meta_key    | meta_value  |
+ * +---------+---------+-------------+-------------+
+ * |   12345 |   67890 | reply_likes | 3           |
+ * +---------+---------+-------------+-------------+
  */
 
 // 返信のいいね数を更新（メタ情報が存在しない場合は自動的に追加）
