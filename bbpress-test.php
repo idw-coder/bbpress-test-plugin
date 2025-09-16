@@ -33,6 +33,12 @@ function bbpress_override_enqueue_tailwind()
 }
 
 /**
+ * 共通テンプレート関数の読み込み（元のbbpressを参考に作成）
+ */
+
+require_once plugin_dir_path( __FILE__ ) . 'includes/common/template.php';
+
+/**
  * bbPressテンプレートスタック機能について
  * 
  * bbPressは独自のテンプレート階層システムを持っており、以下の順序でテンプレートを検索します：

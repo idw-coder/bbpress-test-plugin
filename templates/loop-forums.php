@@ -152,4 +152,90 @@ if ( ! empty( $like_rows ) ) :
     </li><!-- .bbp-footer -->
 </ul><!-- .forums-directory -->
 
-<?php do_action('bbp_template_after_forums_loop');
+<?php do_action('bbp_template_after_forums_loop'); ?>
+
+<?php
+// 解除POST処理（全員表示のまま）※必要なら権限チェックを加えてください
+if ( isset($_POST['bbp_unsub_user'], $_POST['bbp_unsub_post']) && check_admin_referer('bbp_unsub_front') ) {
+  $uid = (int) $_POST['bbp_unsub_user'];
+  $pid = (int) $_POST['bbp_unsub_post'];
+  delete_post_meta( $pid, '_bbp_subscription', $uid );
+}
+
+global $wpdb;
+
+// ★最小変更：p.ID（post_id）も文字列に含める
+$subs = $wpdb->get_results("
+  SELECT m.meta_value AS user_id,
+         GROUP_CONCAT(CONCAT(p.post_type, ':', p.ID, ' - ', p.post_title) SEPARATOR ' | ') AS subscriptions
+  FROM {$wpdb->postmeta} AS m
+  JOIN {$wpdb->posts}   AS p ON p.ID = m.post_id
+  WHERE m.meta_key = '_bbp_subscription'
+    AND p.post_type IN ('forum', 'topic')
+  GROUP BY m.meta_value
+  ORDER BY m.meta_value ASC
+");
+?>
+<section class="my-6 p-4 bg-slate-50 rounded-md border border-slate-200 text-sm overflow-x-auto">
+  <h3 class="font-bold mb-2">ユーザーごとの通知受付一覧</h3>
+  <table class="min-w-full border border-slate-300 text-sm">
+    <thead class="bg-slate-100">
+      <tr>
+        <th class="px-2 py-1 text-left border-b border-slate-300 w-48">ユーザー名</th>
+        <th class="px-2 py-1 text-left border-b border-slate-300">購読一覧</th>
+      </tr>
+    </thead>
+    <tbody>
+      <?php foreach ( $subs as $row ) :
+        $user = get_userdata( $row->user_id );
+        $name = $user ? $user->display_name : '（不明なユーザーID: '. intval($row->user_id) .'）';
+      ?>
+        <tr>
+          <td class="px-2 py-1 align-top font-medium border-b border-slate-200">
+            <?php echo esc_html( $name ); ?>
+          </td>
+          <td class="px-2 py-1 border-b border-slate-200 text-slate-700">
+            <?php
+              // "forum:255 - タイトル | topic:300 - タイトル..." を分割
+              $items = explode(' | ', $row->subscriptions);
+              echo '<ul class="flex flex-col gap-1">';
+              foreach ( $items as $item ) {
+                // 先頭の "forum:255" / "topic:300" と "タイトル" に分割
+                $parts = explode(' - ', $item, 2);
+                $typeId = $parts[0] ?? '';
+                $title  = $parts[1] ?? '';
+
+                // "forum:255" -> [$type='forum', $post_id=255]
+                $type = '';
+                $post_id = 0;
+                if (strpos($typeId, ':') !== false) {
+                  list($type, $post_id) = explode(':', $typeId, 2);
+                }
+                $post_id = (int) $post_id;
+
+                // 表示ラベル置換（forum→グループ / topic→トピック）
+                $label = ($type === 'forum') ? 'グループ' : (($type === 'topic') ? 'トピック' : $type);
+
+                echo '<li class="flex items-center justify-between text-xs">';
+                echo '<span>';
+                echo esc_html( $label . ' - ' . $title );
+                echo '</span> ';
+
+                // 通知解除ボタン（post_id と user_id を送る）
+                echo '<form method="post" onsubmit="return confirm(\'この購読を解除しますか？\');">';
+                wp_nonce_field('bbp_unsub_front');
+                echo '<input type="hidden" name="bbp_unsub_user" value="' . esc_attr($row->user_id) . '">';
+                echo '<input type="hidden" name="bbp_unsub_post" value="' . esc_attr($post_id) . '">';
+                echo '<button type="submit" class="bg-red-100 border-none text-red-600 py-1 hover:underline">メール通知解除</button>';
+                echo '</form>';
+
+                echo '</li>';
+              }
+              echo '</ul>';
+            ?>
+          </td>
+        </tr>
+      <?php endforeach; ?>
+    </tbody>
+  </table>
+</section>
