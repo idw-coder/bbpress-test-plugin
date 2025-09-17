@@ -72,7 +72,8 @@ function my_notify_topic_subscribers_individual($reply_id = 0, $topic_id = 0, $f
     if ( $key !== false ) unset($user_ids[$key]);
     if ( empty($user_ids) ) return;
 
-    // メールアドレス化
+    // wordpress/wp-content/plugins/bbpress/includes/common/functions.phpで定義、
+    // 購読者ID → メールアドレス に変換するだけ
     $emails = (array) bbp_get_email_addresses_from_user_ids($user_ids);
     if ( empty($emails) ) return;
 
