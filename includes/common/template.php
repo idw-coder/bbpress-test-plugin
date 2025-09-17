@@ -47,14 +47,23 @@ add_action('init', function () {
     add_action('bbp_new_reply', 'my_notify_topic_subscribers_individual', 10, 5);
 }, 20);
 
-add_filter('wp_mail', function($args){
-  if (!empty($args['headers'])) {
-    $headers = is_array($args['headers']) ? $args['headers'] : explode("\n", $args['headers']);
-    $headers = array_values(array_filter($headers, fn($h) => stripos(trim($h), 'bcc:') !== 0));
-    $args['headers'] = $headers;
+// 返信通知（トピック購読）だけ Bcc を除去
+add_filter('bbp_subscription_mail_headers', function($headers){
+  $out = [];
+  foreach ((array)$headers as $h) {
+    if (stripos(ltrim($h), 'Bcc:') !== 0) $out[] = $h;
   }
-  return $args;
-}, 20);
+  return $out;
+}, 999);
+
+// 新規トピック通知（フォーラム購読）も使っている場合は同様に
+add_filter('bbp_forum_subscription_mail_headers', function($headers){
+  $out = [];
+  foreach ((array)$headers as $h) {
+    if (stripos(ltrim($h), 'Bcc:') !== 0) $out[] = $h;
+  }
+  return $out;
+}, 999);
 
 /**
  * 返信通知を購読者へ“個別送信”する
