@@ -177,7 +177,12 @@ $subs = $wpdb->get_results("
 ");
 ?>
 <section class="my-6 p-4 bg-slate-50 rounded-md border border-slate-200 text-sm overflow-x-auto">
-  <h3 class="font-bold mb-2">ユーザーごとの通知受付一覧</h3>
+  <h3 class="font-bold !my-2">ユーザーごとのメール通知受付一覧</h3>
+  <p class="mb-4 text-slate-600">
+    質問掲示板でメール通知を設定すると、その掲示板内で新しいトピックが作成されたときやトピックに返信があったときに通知が届きます。<br>
+    トピックでメール通知を設定すると、そのトピックに返信があったときに通知が届きます。<br>
+    ※いずれも自分以外のユーザーによる投稿が対象です。
+  </p>
   <table class="min-w-full border border-slate-300 text-sm">
     <thead class="bg-slate-100">
       <tr>
@@ -226,7 +231,7 @@ $subs = $wpdb->get_results("
                 wp_nonce_field('bbp_unsub_front');
                 echo '<input type="hidden" name="bbp_unsub_user" value="' . esc_attr($row->user_id) . '">';
                 echo '<input type="hidden" name="bbp_unsub_post" value="' . esc_attr($post_id) . '">';
-                echo '<button type="submit" class="bg-red-100 border-none text-red-600 py-1 hover:underline">メール通知解除</button>';
+                echo '<button type="submit" class="!bg-red-100 !border-none text-red-600 py-1 hover:!bg-red-200">メール通知解除</button>';
                 echo '</form>';
 
                 echo '</li>';

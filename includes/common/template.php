@@ -42,87 +42,110 @@ add_filter('bbp_get_user_subscribe_link', function($html, $r, $user_id, $object_
 /**
  * 通知メールのBcc廃止
  */
+// 購読ユーザーIDを空にしてデフォルトのBcc送信を抑止
+add_filter('bbp_forum_subscription_user_ids', function($user_ids, $topic_id, $forum_id){ // forum購読
+  return array();
+}, 999, 3);
 
-add_action('init', function () {
-    add_action('bbp_new_reply', 'my_notify_topic_subscribers_individual', 10, 5);
-}, 20);
-
-// 返信通知（トピック購読）だけ Bcc を除去
-add_filter('bbp_subscription_mail_headers', function($headers){
-  $out = [];
-  foreach ((array)$headers as $h) {
-    if (stripos(ltrim($h), 'Bcc:') !== 0) $out[] = $h;
-  }
-  return $out;
-}, 999);
-
-// 新規トピック通知（フォーラム購読）も使っている場合は同様に
-add_filter('bbp_forum_subscription_mail_headers', function($headers){
-  $out = [];
-  foreach ((array)$headers as $h) {
-    if (stripos(ltrim($h), 'Bcc:') !== 0) $out[] = $h;
-  }
-  return $out;
-}, 999);
+add_filter('bbp_topic_subscription_user_ids', function($user_ids, $reply_id, $topic_id){ // topic購読
+  return array();
+}, 999, 3);
 
 /**
- * 返信通知を購読者へ“個別送信”する
+ * フォーラム購読者へ新規トピック通知（To送信）
  */
-function my_notify_topic_subscribers_individual($reply_id = 0, $topic_id = 0, $forum_id = 0, $anonymous_data = array(), $reply_author = 0)
+add_action('bbp_new_topic', 'my_notify_forum_via_to', 10, 4);
+function my_notify_forum_via_to($topic_id = 0, $forum_id = 0, $anonymous_data = array(), $topic_author = 0)
 {
-    if ( ! function_exists('bbp_is_subscriptions_active') || ! bbp_is_subscriptions_active() ) return;
+    if (!function_exists('bbp_is_subscriptions_active') || !bbp_is_subscriptions_active()) return;
+    if (!bbp_is_topic_public($topic_id)) return;
 
-    // 公開状態チェック（簡略）
-    if ( ! bbp_is_topic_public($topic_id) || ! bbp_is_reply_published($reply_id) ) return;
+    if (!function_exists('bbp_get_forum_subscribers')) return;
+    $user_ids = (array) bbp_get_forum_subscribers($forum_id);
+    $user_ids = array_diff($user_ids, array((int)$topic_author));
+    if (empty($user_ids)) return;
 
-    // 購読者取得（投稿者本人は除外）
-    $user_ids = (array) bbp_get_subscribers($topic_id);
-    $key = array_search( (int) $reply_author, $user_ids, true );
-    if ( $key !== false ) unset($user_ids[$key]);
-    if ( empty($user_ids) ) return;
+    if (!function_exists('bbp_get_email_addresses_from_user_ids')) return;
+    $emails_raw = (array) bbp_get_email_addresses_from_user_ids($user_ids);
+    $emails_map = [];
+    foreach ($emails_raw as $e) {
+        $e = sanitize_email($e);
+        if ($e && is_email($e)) $emails_map[strtolower($e)] = $e;
+    }
+    $emails = array_values($emails_map);
+    if (empty($emails)) return;
 
-    // wordpress/wp-content/plugins/bbpress/includes/common/functions.phpで定義、
-    // 購読者ID → メールアドレス に変換するだけ
-    $emails = (array) bbp_get_email_addresses_from_user_ids($user_ids);
-    if ( empty($emails) ) return;
+    $forum_title = wp_specialchars_decode(strip_tags(bbp_get_forum_title($forum_id)), ENT_QUOTES);
+    $topic_title = wp_specialchars_decode(strip_tags(bbp_get_topic_title($topic_id)), ENT_QUOTES);
+    $topic_url   = bbp_get_topic_permalink($topic_id);
+    $author_name = wp_specialchars_decode(strip_tags(bbp_get_topic_author_display_name($topic_id)), ENT_QUOTES);
 
-    // 件名・本文（bbPressと同等のフォーマットを簡易再現）
-    $forum_title = wp_specialchars_decode( strip_tags( bbp_get_forum_title($forum_id) ), ENT_QUOTES );
-    $topic_title = wp_specialchars_decode( strip_tags( bbp_get_topic_title($topic_id) ), ENT_QUOTES );
-    $reply_name  = wp_specialchars_decode( strip_tags( bbp_get_reply_author_display_name($reply_id) ), ENT_QUOTES );
-    $reply_body  = wp_specialchars_decode( strip_tags( bbp_get_reply_content($reply_id) ), ENT_QUOTES );
+    $subject = sprintf('[%s] %s', $forum_title, $topic_title);
+    $message = sprintf(
+        "%s が新しいトピックを作成しました。\n\nトピック: %s\nリンク: %s\n\n—\nこのメールはフォーラムを購読しているため届いています。\n購読解除はログイン後、該当フォーラム/トピックのページから行えます。",
+        $author_name,
+        $topic_title,
+        $topic_url
+    );
+
+    $headers   = [ bbp_get_email_header() ];
+    $no_reply  = bbp_get_do_not_reply_address();
+    $from_mail = apply_filters('bbp_subscription_from_email', $no_reply);
+    $headers[] = 'From: ' . get_bloginfo('name') . ' <' . $from_mail . '>';
+
+    foreach (array_chunk($emails, 30) as $chunk) {
+        wp_mail($chunk, $subject, $message, $headers);
+    }
+}
+
+/**
+ * トピック購読者＋フォーラム購読者へ返信通知（To送信）
+ */
+add_action('bbp_new_reply', 'my_notify_reply_via_to', 10, 5);
+function my_notify_reply_via_to($reply_id = 0, $topic_id = 0, $forum_id = 0, $anonymous_data = array(), $reply_author = 0)
+{
+    if (!function_exists('bbp_is_subscriptions_active') || !bbp_is_subscriptions_active()) return;
+    if (!bbp_is_topic_public($topic_id) || !bbp_is_reply_published($reply_id)) return;
+
+    $topic_uids = (array) bbp_get_subscribers($topic_id);
+    $forum_uids = function_exists('bbp_get_forum_subscribers') ? (array) bbp_get_forum_subscribers($forum_id) : array();
+
+    $user_ids = array_unique(array_merge($topic_uids, $forum_uids));
+    $user_ids = array_diff($user_ids, array((int)$reply_author));
+    if (empty($user_ids)) return;
+
+    if (!function_exists('bbp_get_email_addresses_from_user_ids')) return;
+    $emails_raw = (array) bbp_get_email_addresses_from_user_ids($user_ids);
+    $emails_map = [];
+    foreach ($emails_raw as $e) {
+        $e = sanitize_email($e);
+        if ($e && is_email($e)) $emails_map[strtolower($e)] = $e;
+    }
+    $emails = array_values($emails_map);
+    if (empty($emails)) return;
+
+    $forum_title = wp_specialchars_decode(strip_tags(bbp_get_forum_title($forum_id)), ENT_QUOTES);
+    $topic_title = wp_specialchars_decode(strip_tags(bbp_get_topic_title($topic_id)), ENT_QUOTES);
+    $reply_name  = wp_specialchars_decode(strip_tags(bbp_get_reply_author_display_name($reply_id)), ENT_QUOTES);
+    $reply_body  = wp_specialchars_decode(strip_tags(bbp_get_reply_content($reply_id)), ENT_QUOTES);
     $reply_url   = bbp_get_reply_url($reply_id);
 
     $subject = apply_filters('bbp_subscription_mail_title', '[' . $forum_title . '] ' . $topic_title, $reply_id, $topic_id);
-
     $message = sprintf(
-        esc_html__('%1$s wrote:
-
-%2$s
-
-Post Link: %3$s
-
------------
-
-You are receiving this email because you subscribed to a forum topic.
-
-Login and visit the topic to unsubscribe from these emails.', 'bbpress'),
+        "%s の新しい返信:\n\n%s\n\nリンク: %s\n\n—\nこのメールはフォーラムまたはトピックを購読しているため届いています。購読解除はログイン後、該当ページから行えます。",
         $reply_name,
         $reply_body,
         $reply_url
     );
     $message = apply_filters('bbp_subscription_mail_message', $message, $reply_id, $topic_id);
+    if (empty($subject) || empty($message)) return;
 
-    if ( empty($subject) || empty($message) ) return;
-
-    // From ヘッダー（noreply@）
-    $headers   = array( bbp_get_email_header() );
+    $headers   = [ bbp_get_email_header() ];
     $no_reply  = bbp_get_do_not_reply_address();
     $from_mail = apply_filters('bbp_subscription_from_email', $no_reply);
     $headers[] = 'From: ' . get_bloginfo('name') . ' <' . $from_mail . '>';
 
-    // Bcc を使わず “1人ずつ”送信
-    foreach ($emails as $to) {
-        wp_mail($to, $subject, $message, $headers);
+    foreach (array_chunk($emails, 30) as $chunk) {
+        wp_mail($chunk, $subject, $message, $headers);
     }
 }
